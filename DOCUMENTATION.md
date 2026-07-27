@@ -12,7 +12,9 @@ YMP Connect digitizes the manual, paper-based operations of Yankari Motor
 Park: passengers can search routes and book/pay for seats online, cashiers
 can verify payments and register walk-in passengers at the counter, and
 admins manage the park's routes, vehicles, drivers, trips, bookings, and
-user accounts from one dashboard.
+user accounts from one dashboard — with a dedicated reports page for
+daily/weekly/monthly revenue breakdowns. A public welcome page shows
+available routes and fares to unregistered visitors.
 
 **Stack:** Laravel 13 (PHP) · Livewire 4 · Blade · Tailwind CSS · SQLite (dev) / MySQL (production)
 
@@ -32,7 +34,7 @@ breakdown (Chapter 4.5) directly:
 
 | Role | Report's listed functions | Implemented as |
 |---|---|---|
-| **Admin** | Dashboard, Manage Users, Manage Routes, Manage Trips, Manage Buses, Manage Bookings, Generate Reports | `Admin\*Controller`s + `Livewire\Admin\Dashboard` + `Livewire\Admin\TripManager` |
+| **Admin** | Dashboard, Manage Users, Manage Routes, Manage Trips, Manage Buses, Manage Bookings, Generate Reports | `Admin\*Controller`s + `Livewire\Admin\Dashboard` + `Livewire\Admin\TripManager` + `Livewire\Admin\Reports` + `HomeController` |
 | **Cashier** | Verify Payment, Confirm Booking, Print Ticket, View Transactions | `Livewire\Cashier\Counter` |
 | **Passenger** | Registration, Login, Search Route, View Schedule, Book Seat, Receive Digital Ticket, View Booking History | `Livewire\Passenger\BookingFlow` + `Livewire\Passenger\BookingHistory` |
 
@@ -73,8 +75,11 @@ displays a passenger works for both cases without special-casing.
 ### Admin
 - Dashboard: total users, total buses, total trips, total bookings, today's
   revenue, total revenue, 7-day revenue bar chart, most popular routes
+- Reports: dedicated reports page with daily/weekly/monthly toggle, period
+  summary (revenue, paid bookings, trips), and per-day breakdown table
 - Manage Trips: open a trip for loading, dispatch it, mark it completed,
-  cancel it
+  cancel it — with active-trip guard that prevents double-booking a vehicle
+  (a vehicle with a loading/dispatched trip can't be assigned a new one)
 - Manage Parks / Routes / Vehicles / Drivers: full CRUD
 - Manage Users: create accounts with a role (admin/cashier/passenger),
   edit name/email/phone/role, reset password, delete (can't delete self)
@@ -99,8 +104,16 @@ displays a passenger works for both cases without special-casing.
 - View booking history; cancel a still-unpaid booking themselves
 
 ### Cross-cutting
+- Public welcome page (`HomeController`): shows available routes with fares,
+  Register/Login buttons for guests; logged-in users skip to their dashboard
 - Role-based route protection (`role:admin`, `role:cashier` middleware)
 - Seat-capacity enforcement at the database/service layer, not just the UI
+- Active-trip guard: a vehicle with an active (loading/dispatched) trip
+  cannot be assigned another — throws `RuntimeException`, caught by
+  TripManager and shown as a form validation error
+- Navigation adapts to role: admin sees Dashboard/Trips/.../Reports,
+  cashier sees Counter, passenger sees Book/My Bookings; guests see
+  Login/Register links
 - Demo seeder: 1 park, 4 routes, 3 drivers, 3 vehicles, a completed trip
   with paid bookings, a dispatched trip, a loading trip, and one pending
   online booking — so every screen has real data on first run
@@ -116,7 +129,6 @@ displays a passenger works for both cases without special-casing.
 | **No visual seat map** | Seats are assigned sequentially by number, not picked on a diagram | Medium |
 | **Tickets are print-to-PDF via browser, not a generated PDF file** | Works fine for a demo, but isn't a downloadable PDF artifact | Small — could reuse the same Dompdf approach as your SRMIS project |
 | **No automated tests** | Nothing verifies booking/payment logic beyond manual review | Medium — PHPUnit/Pest feature tests for the booking flow would be the highest-value addition |
-| **No separate "Generate Reports" page with daily/weekly/monthly toggle** | The dashboard covers today + 7-day trend + totals, but not a dedicated filterable reports screen the report chapter describes | Small–Medium |
 | **No SMS/email notification on booking/payment** | Not mentioned as a hard requirement in the report, but common in real systems | Medium (needs a provider) |
 
 ---
@@ -156,12 +168,14 @@ Passenger → book a trip).
 
 1. **Admin** — show Parks/Routes/Vehicles/Drivers/Users already set up, open
    the dashboard (totals + today's revenue + 7-day chart + popular routes),
-   then Trips: dispatch the pre-seeded "loading" trip.
+   then Trips: dispatch the pre-seeded "loading" trip. Open Reports: toggle
+   between Daily/Weekly/Monthly to show the period breakdown table.
 2. **Cashier** — open the counter: confirm the pre-seeded *pending* online
    booking (collect cash → ticket generated), then record a brand-new
    walk-in booking for a passenger with no account, and check it shows up
    under today's transactions.
-3. **Passenger** — book a seat on a different trip, pay online (mock card),
+3. **Passenger** — visit the public welcome page (available routes with fares),
+   then log in, book a seat on a different trip, pay online (mock card),
    open the printable ticket, then check "My bookings" and cancel a
    still-unpaid one to show that flow too.
 4. **Back to Admin** — refresh Bookings and the dashboard to show everything
@@ -178,6 +192,5 @@ Passenger → book a trip).
 3. Decide whether a real payment gateway matters for your grade — if not,
    leave it mocked and just be ready to explain the decision (the report
    already frames it as optional).
-4. If time allows: a dedicated Reports page and PDF ticket generation are
-   the two closest matches to the original report's stated scope that
-   aren't built yet.
+4. If time allows: PDF ticket generation is the closest match to the
+   original report's stated scope that isn't built yet.

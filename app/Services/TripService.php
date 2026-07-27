@@ -11,9 +11,24 @@ class TripService
 {
     /**
      * Open a new trip for loading at a park.
+     *
+     * @throws \RuntimeException if the vehicle already has an active trip
+     *         (loading or dispatched) — a vehicle can only run one trip at
+     *         a time. This is what stops buses being double-booked.
      */
     public function createTrip(Vehicle $vehicle, TripRoute $route, \DateTimeInterface $departureTime): Trip
     {
+        $alreadyActive = Trip::query()
+            ->where('vehicle_id', $vehicle->id)
+            ->whereIn('status', ['loading', 'dispatched'])
+            ->exists();
+
+        if ($alreadyActive) {
+            throw new \RuntimeException(
+                "{$vehicle->plate_no} already has an active trip. Complete or cancel it before assigning a new one."
+            );
+        }
+
         return Trip::create([
             'vehicle_id' => $vehicle->id,
             'trip_route_id' => $route->id,

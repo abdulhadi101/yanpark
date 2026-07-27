@@ -2,22 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\TripRoute;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class HomeController extends Controller
 {
-    public function __invoke(Request $request)
+    public function index(): View|RedirectResponse
     {
-        $user = $request->user();
-
-        if (! $user) {
-            return redirect()->route('login');
+        if (auth()->check()) {
+            return redirect()->route('dashboard');
         }
 
-        return match (true) {
-            $user->isAdmin() => redirect()->route('admin.dashboard'),
-            $user->isCashier() => redirect()->route('cashier.counter'),
-            default => redirect()->route('passenger.book'),
-        };
+        $routes = TripRoute::with('park')->orderBy('origin')->get();
+
+        return view('home', compact('routes'));
     }
 }

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 100" fill="none">
+  <!-- Icon -->
+  <rect x="4" y="18" width="56" height="30" rx="5" fill="#059669"/>
+  <path d="M11 18 L14 4 L50 4 L53 18" fill="#059669"/>
+  <rect x="46" y="8" width="10" height="10" rx="2.5" fill="#d1fae5"/>
+  <rect x="20" y="8" width="8" height="8" rx="2" fill="#d1fae5"/>
+  <rect x="32" y="8" width="8" height="8" rx="2" fill="#d1fae5"/>
+  <rect x="22" y="28" width="12" height="8" rx="1.5" fill="#d1fae5"/>
+  <rect x="38" y="28" width="12" height="8" rx="1.5" fill="#d1fae5"/>
+  <circle cx="18" cy="52" r="6" fill="#1e293b"/>
+  <circle cx="46" cy="52" r="6" fill="#1e293b"/>
+  <line x1="4" y1="62" x2="60" y2="62" stroke="#d1fae5" stroke-width="2" stroke-dasharray="5 3"/>
+  <!-- YMP Connect text -->
+  <text x="80" y="55" font-family="system-ui, -apple-system, sans-serif" font-size="36" font-weight="700" fill="#1e293b" letter-spacing="-0.5">YMP</text>
+  <text x="80" y="85" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="500" fill="#059669" letter-spacing="2">CONNECT</text>
+</svg>

@@ -6,8 +6,10 @@ use App\Http\Controllers\Admin\ParkController;
 use App\Http\Controllers\Admin\TripRouteController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VehicleController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TicketController;
 use App\Livewire\Admin\Dashboard as AdminDashboard;
+use App\Livewire\Admin\Reports as AdminReports;
 use App\Livewire\Admin\TripManager;
 use App\Livewire\Cashier\Counter as CashierCounter;
 use App\Livewire\Passenger\BookingFlow;
@@ -23,9 +25,7 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', function () {
-    return auth()->check() ? redirect()->route('dashboard') : redirect()->route('login');
-});
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Generic landing point after login â€” sends each role to its own home.
 // If the starter kit already defines a "dashboard" route, replace its
@@ -47,6 +47,7 @@ Route::middleware('auth')->get('/dashboard', function () {
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', AdminDashboard::class)->name('dashboard');
     Route::get('/trips', TripManager::class)->name('trips');
+    Route::get('/reports', AdminReports::class)->name('reports');
 
     Route::resource('parks', ParkController::class)->except(['show']);
     Route::resource('routes', TripRouteController::class)->except(['show']);

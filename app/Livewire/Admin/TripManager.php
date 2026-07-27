@@ -78,11 +78,17 @@ class TripManager extends Component
             'departureTime' => ['required', 'date'],
         ]);
 
-        $trips->createTrip(
-            Vehicle::findOrFail($this->vehicleId),
-            TripRoute::findOrFail($this->routeId),
-            \Illuminate\Support\Carbon::parse($this->departureTime)
-        );
+        try {
+            $trips->createTrip(
+                Vehicle::findOrFail($this->vehicleId),
+                TripRoute::findOrFail($this->routeId),
+                \Illuminate\Support\Carbon::parse($this->departureTime)
+            );
+        } catch (\RuntimeException $e) {
+            $this->addError('vehicleId', $e->getMessage());
+
+            return;
+        }
 
         $this->reset(['vehicleId', 'routeId']);
         session()->flash('status', 'Trip opened for loading.');

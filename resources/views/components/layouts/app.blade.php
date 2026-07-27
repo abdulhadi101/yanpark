@@ -11,7 +11,7 @@
 
     <nav class="bg-slate-800 text-white">
         <div class="max-w-5xl mx-auto px-4 flex items-center justify-between h-14">
-            <span class="font-semibold">Yankari Motor Park</span>
+            <a href="{{ route('home') }}" class="font-semibold">Yankari Motor Park</a>
 
             @auth
                 <div class="flex items-center gap-4 text-sm">
@@ -24,6 +24,7 @@
                         <a href="{{ route('admin.drivers.index') }}" class="hover:text-emerald-300">Drivers</a>
                         <a href="{{ route('admin.bookings.index') }}" class="hover:text-emerald-300">Bookings</a>
                         <a href="{{ route('admin.users.index') }}" class="hover:text-emerald-300">Users</a>
+                        <a href="{{ route('admin.reports') }}" class="hover:text-emerald-300">Reports</a>
                     @elseif (auth()->user()->isCashier())
                         <a href="{{ route('cashier.counter') }}" class="hover:text-emerald-300">Counter</a>
                     @else
@@ -35,6 +36,11 @@
                         @csrf
                         <button class="hover:text-red-300">Log out</button>
                     </form>
+                </div>
+            @else
+                <div class="flex items-center gap-4 text-sm">
+                    <a href="{{ route('login') }}" class="hover:text-emerald-300">Login</a>
+                    <a href="{{ route('register') }}" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700">Register</a>
                 </div>
             @endauth
         </div>
