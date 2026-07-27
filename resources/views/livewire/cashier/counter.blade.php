@@ -35,13 +35,13 @@
                 <div>
                     <p class="font-medium text-slate-800">{{ $booking->passengerName() }}</p>
                     <p class="text-sm text-slate-500">
-                        {{ $booking->trip->route->label() }} Â· Seat #{{ $booking->seat_no }} Â·
-                        â‚¦{{ number_format($booking->trip->route->fare, 2) }} Â· Ref: {{ $booking->reference }}
+                        {{ $booking->trip->route->label() }} · Seat #{{ $booking->seat_no }} ·
+                        â‚¦{{ number_format($booking->trip->route->fare, 2) }} · Ref: {{ $booking->reference }}
                     </p>
                 </div>
                 <button wire:click="confirmAndCollectCash({{ $booking->id }})"
                     class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-sm hover:bg-emerald-700">
-                    Confirm Â· collect cash
+                    Confirm · collect cash
                 </button>
             </div>
         @empty
@@ -62,7 +62,7 @@
                     <option value="">Select trip</option>
                     @foreach ($this->loadingTrips as $trip)
                         <option value="{{ $trip->id }}">
-                            {{ $trip->route->label() }} Â· {{ $trip->departure_time->format('g:i A') }}
+                            {{ $trip->route->label() }} · {{ $trip->departure_time->format('g:i A') }}
                             ({{ $trip->seatsAvailable() }} left)
                         </option>
                     @endforeach
@@ -100,8 +100,8 @@
             @forelse ($this->todaysTransactions as $payment)
                 <div class="py-2 flex items-center justify-between text-sm">
                     <div>
-                        <p class="text-slate-700">{{ $payment->booking->passengerName() }} Â· {{ $payment->booking->trip->route->label() }}</p>
-                        <p class="text-slate-400">{{ $payment->created_at->format('g:i A') }} Â· {{ ucfirst($payment->method) }} Â· Ref: {{ $payment->reference }}</p>
+                        <p class="text-slate-700">{{ $payment->booking->passengerName() }} · {{ $payment->booking->trip->route->label() }}</p>
+                        <p class="text-slate-400">{{ $payment->created_at->format('g:i A') }} · {{ ucfirst($payment->method) }} · Ref: {{ $payment->reference }}</p>
                     </div>
                     <span class="font-medium text-emerald-700">â‚¦{{ number_format($payment->amount, 2) }}</span>
                 </div>

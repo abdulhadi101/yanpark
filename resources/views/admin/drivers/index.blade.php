@@ -18,7 +18,7 @@
                 <div class="p-4 flex items-center justify-between">
                     <div>
                         <p class="font-medium text-slate-800">{{ $driver->name }}</p>
-                        <p class="text-sm text-slate-500">{{ $driver->phone }} Â· License: {{ $driver->license_no }} Â· {{ $driver->vehicles_count }} vehicle(s)</p>
+                        <p class="text-sm text-slate-500">{{ $driver->phone }} · License: {{ $driver->license_no }} · {{ $driver->vehicles_count }} vehicle(s)</p>
                     </div>
                     <div class="flex gap-3 text-sm">
                         <a href="{{ route('admin.drivers.edit', $driver) }}" class="text-slate-600 underline">Edit</a>

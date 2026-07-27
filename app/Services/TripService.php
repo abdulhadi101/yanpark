@@ -39,7 +39,7 @@ class TripService
     }
 
     /**
-     * Move a trip from "loading" to "dispatched" â€” the vehicle has left the park.
+     * Move a trip from "loading" to "dispatched" — the vehicle has left the park.
      */
     public function dispatch(Trip $trip): Trip
     {

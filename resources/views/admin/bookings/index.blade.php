@@ -30,8 +30,8 @@
                     <div>
                         <p class="font-medium text-slate-800">{{ $booking->passengerName() }}</p>
                         <p class="text-sm text-slate-500">
-                            {{ $booking->trip->route->label() }} Â· Seat #{{ $booking->seat_no }} Â·
-                            {{ $booking->trip->departure_time->format('d M, g:i A') }} Â· Ref: {{ $booking->reference }}
+                            {{ $booking->trip->route->label() }} · Seat #{{ $booking->seat_no }} ·
+                            {{ $booking->trip->departure_time->format('d M, g:i A') }} · Ref: {{ $booking->reference }}
                             @if ($booking->isWalkIn())
                                 <span class="text-slate-400">(walk-in)</span>
                             @endif

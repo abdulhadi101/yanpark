@@ -34,8 +34,8 @@
                     <div>
                         <p class="font-medium text-slate-800">{{ $trip->route->label() }}</p>
                         <p class="text-sm text-slate-500">
-                            {{ $trip->departure_time->format('g:i A') }} Â·
-                            {{ $trip->vehicle->plate_no }} ({{ ucfirst($trip->vehicle->type) }}) Â·
+                            {{ $trip->departure_time->format('g:i A') }} ·
+                            {{ $trip->vehicle->plate_no }} ({{ ucfirst($trip->vehicle->type) }}) ·
                             {{ $trip->seatsAvailable() }} seat(s) left
                         </p>
                     </div>
@@ -77,7 +77,7 @@
     @if ($step === 'pay' && $activeBooking)
         <div class="bg-white rounded-xl border border-slate-200 p-6 space-y-4">
             <h2 class="font-semibold text-slate-800">Pay for your booking</h2>
-            <p class="text-sm text-slate-500">Reference: <span class="font-mono">{{ $activeBooking->reference }}</span> Â· Seat #{{ $activeBooking->seat_no }}</p>
+            <p class="text-sm text-slate-500">Reference: <span class="font-mono">{{ $activeBooking->reference }}</span> · Seat #{{ $activeBooking->seat_no }}</p>
             <p class="text-sm text-slate-500">This is a demo payment step â€” clicking "Pay now" simulates a successful transaction.</p>
             <button wire:click="pay" class="px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm hover:bg-emerald-700">Pay now</button>
         </div>

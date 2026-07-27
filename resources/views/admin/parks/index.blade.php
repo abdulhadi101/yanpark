@@ -18,7 +18,7 @@
                 <div class="p-4 flex items-center justify-between">
                     <div>
                         <p class="font-medium text-slate-800">{{ $park->name }}</p>
-                        <p class="text-sm text-slate-500">{{ $park->location }} Â· {{ $park->vehicles_count }} vehicle(s) Â· {{ $park->routes_count }} route(s)</p>
+                        <p class="text-sm text-slate-500">{{ $park->location }} · {{ $park->vehicles_count }} vehicle(s) · {{ $park->routes_count }} route(s)</p>
                     </div>
                     <div class="flex gap-3 text-sm">
                         <a href="{{ route('admin.parks.edit', $park) }}" class="text-slate-600 underline">Edit</a>

@@ -32,6 +32,6 @@ class TripRoute extends Model
 
     public function label(): string
     {
-        return "{$this->origin} â†’ {$this->destination}";
+        return "{$this->origin} → {$this->destination}";
     }
 }

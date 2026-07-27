@@ -23,7 +23,7 @@ class BookingService
     }
 
     /**
-     * Book a seat for a walk-in passenger at the park counter â€” no online
+     * Book a seat for a walk-in passenger at the park counter — no online
      * account required. Used by the Cashier module.
      *
      * @throws \RuntimeException if the trip is not open or fully booked.
@@ -40,7 +40,7 @@ class BookingService
     {
         return DB::transaction(function () use ($booking) {
             if ($booking->status === 'paid') {
-                throw new \RuntimeException('A paid booking cannot be cancelled here â€” a refund/void must be handled at the park office.');
+                throw new \RuntimeException('A paid booking cannot be cancelled here — a refund/void must be handled at the park office.');
             }
 
             $booking->update(['status' => 'cancelled']);

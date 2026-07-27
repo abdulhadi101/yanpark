@@ -23,8 +23,8 @@
                 <div>
                     <p class="font-medium text-slate-800">{{ $booking->trip->route->label() }}</p>
                     <p class="text-sm text-slate-500">
-                        {{ $booking->trip->departure_time->format('D, d M Y g:i A') }} Â·
-                        Seat #{{ $booking->seat_no }} Â· Ref: {{ $booking->reference }}
+                        {{ $booking->trip->departure_time->format('D, d M Y g:i A') }} ·
+                        Seat #{{ $booking->seat_no }} · Ref: {{ $booking->reference }}
                     </p>
                     <span class="inline-block mt-1 text-xs font-medium px-2 py-0.5 rounded-full
                         {{ match($booking->status) {

@@ -68,7 +68,7 @@
                         </span>
                     </p>
                     <p class="text-sm text-slate-500">
-                        {{ $trip->vehicle->plate_no }} Â· {{ $trip->departure_time->format('g:i A') }} Â·
+                        {{ $trip->vehicle->plate_no }} · {{ $trip->departure_time->format('g:i A') }} ·
                         {{ $trip->seats_booked }}/{{ $trip->vehicle->capacity }} seats booked
                     </p>
                 </div>

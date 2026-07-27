@@ -11,7 +11,7 @@ class PaymentService
     /**
      * Record a payment against a booking and mark it paid.
      *
-     * This is a mock/demo payment step â€” no real gateway is called. To wire up
+     * This is a mock/demo payment step — no real gateway is called. To wire up
      * a real provider later (e.g. Paystack), swap the body of this method for
      * an API call and only mark the booking "paid" once the gateway confirms.
      */

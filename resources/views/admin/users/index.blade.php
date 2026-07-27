@@ -23,7 +23,7 @@
                 <div class="p-4 flex items-center justify-between">
                     <div>
                         <p class="font-medium text-slate-800">{{ $user->name }}</p>
-                        <p class="text-sm text-slate-500">{{ $user->email }} Â· {{ $user->phone ?? 'No phone on file' }}</p>
+                        <p class="text-sm text-slate-500">{{ $user->email }} · {{ $user->phone ?? 'No phone on file' }}</p>
                     </div>
                     <div class="flex items-center gap-3">
                         <span class="text-xs font-medium px-2 py-1 rounded-full

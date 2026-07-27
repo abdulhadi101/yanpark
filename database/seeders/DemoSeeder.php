@@ -127,7 +127,7 @@ class DemoSeeder extends Seeder
             'reference' => 'PAY-'.strtoupper(Str::random(10)),
         ]);
 
-        // A trip still loading right now â€” ready for the admin demo to dispatch,
+        // A trip still loading right now — ready for the admin demo to dispatch,
         // open for the passenger demo to book against, and used below for a
         // pending booking the cashier can confirm at the counter.
         $loadingTrip = Trip::create([
@@ -138,7 +138,7 @@ class DemoSeeder extends Seeder
             'seats_booked' => 1,
         ]);
 
-        // A booking made online but not yet paid â€” lets the cashier demo
+        // A booking made online but not yet paid — lets the cashier demo
         // "verify payment / confirm booking" against a real pending record.
         Booking::create([
             'trip_id' => $loadingTrip->id,

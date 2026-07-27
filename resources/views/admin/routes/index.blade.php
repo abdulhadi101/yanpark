@@ -18,7 +18,7 @@
                 <div class="p-4 flex items-center justify-between">
                     <div>
                         <p class="font-medium text-slate-800">{{ $route->label() }}</p>
-                        <p class="text-sm text-slate-500">{{ $route->park->name }} Â· â‚¦{{ number_format($route->fare, 2) }}</p>
+                        <p class="text-sm text-slate-500">{{ $route->park->name }} · â‚¦{{ number_format($route->fare, 2) }}</p>
                     </div>
                     <div class="flex gap-3 text-sm">
                         <a href="{{ route('admin.routes.edit', $route) }}" class="text-slate-600 underline">Edit</a>

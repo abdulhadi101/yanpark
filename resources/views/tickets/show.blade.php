@@ -26,7 +26,7 @@
                 </dd>
             </div>
             @if ($booking->payment)
-                <div class="flex justify-between py-2"><dt class="text-slate-500">Amount paid</dt><dd>â‚¦{{ number_format($booking->payment->amount, 2) }}</dd></div>
+                <div class="flex justify-between py-2"><dt class="text-slate-500">Amount paid</dt><dd>₦{{ number_format($booking->payment->amount, 2) }}</dd></div>
             @endif
         </dl>
 

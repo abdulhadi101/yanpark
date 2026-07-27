@@ -17,9 +17,9 @@
             @forelse ($vehicles as $vehicle)
                 <div class="p-4 flex items-center justify-between">
                     <div>
-                        <p class="font-medium text-slate-800">{{ $vehicle->plate_no }} Â· {{ ucfirst($vehicle->type) }}</p>
+                        <p class="font-medium text-slate-800">{{ $vehicle->plate_no }} · {{ ucfirst($vehicle->type) }}</p>
                         <p class="text-sm text-slate-500">
-                            {{ $vehicle->park->name }} Â· {{ $vehicle->capacity }} seats Â·
+                            {{ $vehicle->park->name }} · {{ $vehicle->capacity }} seats ·
                             Driver: {{ $vehicle->driver->name ?? 'Unassigned' }}
                         </p>
                     </div>
