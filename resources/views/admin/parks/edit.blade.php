@@ -1,4 +1,4 @@
-﻿<x-layouts.app>
+<x-layouts.app>
     <div class="max-w-lg mx-auto space-y-6">
         <h1 class="text-2xl font-semibold text-slate-800">Edit park</h1>
 

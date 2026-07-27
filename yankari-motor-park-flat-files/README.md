@@ -158,10 +158,20 @@ Passenger → book a trip).
   `pending` (unpaid) bookings can be cancelled this way; a paid booking
   needs a manual refund/void at the park office, which is out of scope here.
 
-## Remaining gaps (not built, worth knowing before your defense)
+## Known limitations (not bugs, scope decisions)
 
-- No live seat updates — if two browser tabs have the same trip open, seat
-  counts don't refresh until the page reloads.
-- No visual seat map — seats are assigned sequentially by number.
-- Tickets are browser-print HTML, not a generated PDF file.
-- No automated tests.
+- **Payment is a mock/demo step** — no real gateway is called, matching the
+  report's own statement that "integration with online payment gateways may
+  not be fully implemented." To go further, swap `PaymentService::pay()` for
+  a Paystack/Flutterwave API call.
+- **No live seat updates across browser tabs** — seat counts refresh on page
+  load only. Adding Livewire polling or broadcasting would fix this.
+- **No visual seat map** — seats are assigned sequentially by number, not
+  picked on a diagram.
+- **Tickets are browser-print HTML** — works for demo purposes, but isn't a
+  downloadable PDF artifact.
+- **No automated tests** — PHPUnit/Pest feature tests for the booking flow
+  would be the highest-value addition if time allows.
+- **No separate "Generate Reports" page** — the dashboard covers today +
+  7-day trend + totals, but not a dedicated filterable reports screen the
+  report chapter describes.

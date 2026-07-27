@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\Admin\DriverController;

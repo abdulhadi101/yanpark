@@ -1,4 +1,4 @@
-﻿<div class="max-w-4xl mx-auto space-y-6">
+<div class="max-w-4xl mx-auto space-y-6">
 
     <div>
         <h1 class="text-2xl font-semibold text-slate-800">Park counter</h1>

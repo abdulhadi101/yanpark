@@ -1,4 +1,4 @@
-﻿@php($maxRevenue = max(1, collect($revenueLastDays)->max('total')))
+@php($maxRevenue = max(1, collect($revenueLastDays)->max('total')))
 
 <div class="max-w-5xl mx-auto space-y-6">
 
