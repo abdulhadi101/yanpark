@@ -13,6 +13,11 @@ class Vehicle extends Model
 
     protected $fillable = ['park_id', 'driver_id', 'plate_no', 'type', 'capacity'];
 
+    protected function casts(): array
+    {
+        return ['capacity' => 'integer'];
+    }
+
     public function park(): BelongsTo
     {
         return $this->belongsTo(Park::class);

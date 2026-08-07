@@ -83,6 +83,15 @@ class BookingFlow extends Component
         $this->step = 'search';
     }
 
+    public function getSelectedTripProperty(): ?Trip
+    {
+        if (! $this->selectedTripId) {
+            return null;
+        }
+
+        return Trip::with(['route', 'vehicle'])->find($this->selectedTripId);
+    }
+
     public function render()
     {
         return view('livewire.passenger.booking-flow');

@@ -15,7 +15,7 @@ class Trip extends Model
 
     protected function casts(): array
     {
-        return ['departure_time' => 'datetime'];
+        return ['departure_time' => 'datetime', 'seats_booked' => 'integer'];
     }
 
     public function vehicle(): BelongsTo
@@ -35,7 +35,7 @@ class Trip extends Model
 
     public function seatsAvailable(): int
     {
-        return max(0, $this->vehicle->capacity - $this->seats_booked);
+        return max(0, ($this->vehicle?->capacity ?? 0) - $this->seats_booked);
     }
 
     public function isFull(): bool

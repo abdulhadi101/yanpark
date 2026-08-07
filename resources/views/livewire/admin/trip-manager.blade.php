@@ -14,9 +14,9 @@
     <div class="bg-white rounded-xl border border-slate-200 p-5 space-y-4">
         <div>
             <label class="block text-sm font-medium text-slate-600 mb-1">Park</label>
-            <select wire:model.live="parkId" class="w-full rounded-lg border-slate-300">
+            <select wire:model.live="parkId" class="w-full rounded-lg border border-slate-300 focus:border-emerald-500 focus:ring-emerald-500 focus:ring-1">
                 @foreach ($this->parks as $park)
-                    <option value="{{ $park->id }}">{{ $park->name }} â€” {{ $park->location }}</option>
+                    <option value="{{ $park->id }}">{{ $park->name }} — {{ $park->location }}</option>
                 @endforeach
             </select>
         </div>
@@ -24,7 +24,7 @@
         <div class="grid sm:grid-cols-3 gap-4">
             <div>
                 <label class="block text-sm font-medium text-slate-600 mb-1">Vehicle</label>
-                <select wire:model="vehicleId" class="w-full rounded-lg border-slate-300">
+                <select wire:model="vehicleId" class="w-full rounded-lg border border-slate-300 focus:border-emerald-500 focus:ring-emerald-500 focus:ring-1">
                     <option value="">Select vehicle</option>
                     @foreach ($this->vehicles as $vehicle)
                         <option value="{{ $vehicle->id }}">{{ $vehicle->plate_no }} ({{ $vehicle->capacity }} seats)</option>
@@ -34,22 +34,23 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-slate-600 mb-1">Route</label>
-                <select wire:model="routeId" class="w-full rounded-lg border-slate-300">
+                <select wire:model="routeId" class="w-full rounded-lg border border-slate-300 focus:border-emerald-500 focus:ring-emerald-500 focus:ring-1">
                     <option value="">Select route</option>
                     @foreach ($this->routes as $route)
-                        <option value="{{ $route->id }}">{{ $route->label() }} (â‚¦{{ number_format($route->fare, 0) }})</option>
+                        <option value="{{ $route->id }}">{{ $route->label() }} (₦{{ number_format($route->fare, 0) }})</option>
                     @endforeach
                 </select>
                 @error('routeId') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
                 <label class="block text-sm font-medium text-slate-600 mb-1">Departure</label>
-                <input type="datetime-local" wire:model="departureTime" class="w-full rounded-lg border-slate-300">
+                <input type="datetime-local" wire:model="departureTime" class="w-full rounded-lg border border-slate-300 focus:border-emerald-500 focus:ring-emerald-500 focus:ring-1">
                 @error('departureTime') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
             </div>
         </div>
 
-        <button wire:click="createTrip" class="px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm hover:bg-emerald-700">
+        <button wire:click="createTrip" wire:loading.attr="disabled" wire:loading.class="opacity-50"
+            class="px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm hover:bg-emerald-700">
             Open trip for loading
         </button>
     </div>
@@ -75,6 +76,8 @@
                 <div class="flex gap-2">
                     @if ($trip->status === 'loading')
                         <button wire:click="dispatch_({{ $trip->id }})"
+                            wire:loading.attr="disabled" wire:loading.class="opacity-50"
+                            wire:confirm="Dispatch this trip?"
                             class="px-3 py-1.5 rounded-lg bg-slate-800 text-white text-sm hover:bg-slate-900">
                             Dispatch
                         </button>
@@ -84,6 +87,7 @@
                         </button>
                     @else
                         <button wire:click="complete({{ $trip->id }})"
+                            wire:loading.attr="disabled" wire:loading.class="opacity-50"
                             class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-sm hover:bg-emerald-700">
                             Mark completed
                         </button>
@@ -92,7 +96,7 @@
             </div>
         @empty
             <div class="text-center text-slate-400 py-10 border border-dashed border-slate-200 rounded-xl">
-                No active trips â€” open one above.
+                No active trips — open one above.
             </div>
         @endforelse
     </div>

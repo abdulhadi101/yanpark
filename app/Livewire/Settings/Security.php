@@ -5,8 +5,10 @@ namespace App\Livewire\Settings;
 use App\Concerns\PasswordValidationRules;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 
+#[Layout('components.layouts.app')]
 class Security extends Component
 {
     use PasswordValidationRules;

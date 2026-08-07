@@ -19,6 +19,15 @@ class DemoSeeder extends Seeder
 {
     public function run(): void
     {
+        // Idempotent — clear existing data so this seeder can be re-run safely.
+        Payment::query()->delete();
+        Booking::query()->delete();
+        Trip::query()->delete();
+        Vehicle::query()->delete();
+        Driver::query()->delete();
+        TripRoute::query()->delete();
+        Park::query()->delete();
+        User::query()->delete();
         // ---- Users (one per role, easy demo credentials) -------------------
 
         $admin = User::create([

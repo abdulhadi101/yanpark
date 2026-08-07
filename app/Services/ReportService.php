@@ -52,10 +52,15 @@ class ReportService
 
     public function passengersToday(): int
     {
-        return Booking::query()
+        $raw = Booking::query()
             ->whereDate('created_at', Carbon::today())
             ->where('status', 'paid')
-            ->count();
+            ->get();
+
+        $registered = $raw->whereNotNull('user_id')->unique('user_id')->count();
+        $walkIns = $raw->whereNull('user_id')->unique('walk_in_name')->count();
+
+        return $registered + $walkIns;
     }
 
     /**
@@ -91,7 +96,8 @@ class ReportService
      */
     public function popularRoutes(int $limit = 5)
     {
-        return DB::table('trips')
+        return DB::table('bookings')
+            ->join('trips', 'bookings.trip_id', '=', 'trips.id')
             ->join('trip_routes', 'trips.trip_route_id', '=', 'trip_routes.id')
             ->selectRaw('trip_routes.origin as origin, trip_routes.destination as destination, COUNT(*) as trips')
             ->groupBy('trip_routes.origin', 'trip_routes.destination')
@@ -178,5 +184,4 @@ class ReportService
             'breakdown' => $breakdown,
         ];
     }
-}
 }

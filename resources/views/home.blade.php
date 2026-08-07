@@ -1,38 +1,60 @@
-<x-layouts.app>
-    <div class="max-w-4xl mx-auto space-y-8">
+@extends('layouts.app.sidebar')
 
-        <div class="text-center py-10 bg-white rounded-xl border border-slate-200">
-            <h1 class="text-3xl font-semibold text-slate-800">Welcome to Yankari Motor Park</h1>
-            <p class="text-slate-500 mt-2">Book your seat online and skip the queue at the park.</p>
-            <div class="mt-6 flex items-center justify-center gap-3">
-                <a href="{{ route('register') }}" class="px-5 py-2.5 rounded-lg bg-emerald-600 text-white text-sm hover:bg-emerald-700">
-                    Create an account
-                </a>
-                <a href="{{ route('login') }}" class="px-5 py-2.5 rounded-lg border border-slate-300 text-slate-600 text-sm hover:bg-slate-50">
-                    Login
-                </a>
+@section('content')
+    <main class="flex-1">
+        {{-- Hero Section --}}
+        <div class="relative overflow-hidden">
+            <div class="absolute inset-0">
+                <img src="{{ asset('yankari.jpg') }}" alt="Yankari Motor Park fleet" class="h-full w-full object-cover" />
+                <div class="absolute inset-0 bg-gradient-to-r from-zinc-900/80 via-zinc-900/50 to-transparent"></div>
             </div>
-        </div>
 
-        <div>
-            <h2 class="font-medium text-slate-700 mb-3">Available routes</h2>
-            <div class="bg-white rounded-xl border border-slate-200 divide-y divide-slate-100">
-                @forelse ($routes as $route)
-                    <div class="p-4 flex items-center justify-between">
-                        <div>
-                            <p class="font-medium text-slate-800">{{ $route->label() }}</p>
-                            <p class="text-sm text-slate-500">From {{ $route->park->name }}</p>
-                        </div>
-                        <p class="font-semibold text-emerald-700">₦{{ number_format($route->fare, 2) }}</p>
+            <div class="relative px-6 py-16 sm:px-12 sm:py-24 lg:px-16 lg:py-32">
+                <div class="max-w-2xl">
+                    <h1 class="text-4xl font-bold tracking-tight text-white sm:text-5xl">
+                        Yankari Motor Park
+                    </h1>
+                    <p class="mt-4 text-lg leading-8 text-zinc-200">
+                        Book your seat online and skip the queue. Fast, reliable inter-state transport at your fingertips.
+                    </p>
+                    <div class="mt-8 flex items-center gap-4">
+                        <a href="{{ route('register') }}" wire:navigate
+                           class="rounded-lg bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 transition-colors">
+                            Create an account
+                        </a>
+                        <a href="{{ route('login') }}" wire:navigate
+                           class="rounded-lg border border-white/30 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10 transition-colors">
+                            Login
+                        </a>
                     </div>
-                @empty
-                    <p class="p-6 text-center text-slate-400">No routes published yet — check back soon.</p>
-                @endforelse
+                </div>
             </div>
-            <p class="text-sm text-slate-400 mt-3 text-center">
-                <a href="{{ route('register') }}" class="text-emerald-700 underline">Register</a> or
-                <a href="{{ route('login') }}" class="text-emerald-700 underline">login</a> to book a seat and view live schedules.
-            </p>
         </div>
-    </div>
-</x-layouts.app>
+
+        {{-- Available Routes --}}
+        <div class="px-6 py-12 sm:px-12 lg:px-16">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-xl font-semibold text-zinc-900 mb-6">Available Routes</h2>
+                <div class="bg-white rounded-xl border border-zinc-200 divide-y divide-zinc-100 shadow-sm">
+                    @forelse ($routes as $route)
+                        <div class="p-5 flex items-center justify-between">
+                            <div>
+                                <p class="font-medium text-zinc-800">{{ $route->label() }}</p>
+                                <p class="text-sm text-zinc-500 mt-0.5">From {{ $route->park->name }}</p>
+                            </div>
+                            <p class="font-semibold text-emerald-700 text-lg">₦{{ number_format($route->fare, 2) }}</p>
+                        </div>
+                    @empty
+                        <div class="p-8 text-center text-zinc-400">
+                            No routes published yet — check back soon.
+                        </div>
+                    @endforelse
+                </div>
+                <p class="text-sm text-zinc-400 mt-4 text-center">
+                    <a href="{{ route('register') }}" wire:navigate class="text-emerald-600 hover:text-emerald-700 underline">Register</a> or
+                    <a href="{{ route('login') }}" wire:navigate class="text-emerald-600 hover:text-emerald-700 underline">login</a> to book a seat and view live schedules.
+                </p>
+            </div>
+        </div>
+    </main>
+@endsection

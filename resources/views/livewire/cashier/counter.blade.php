@@ -19,16 +19,16 @@
 
     <div class="bg-white rounded-xl border border-slate-200 p-4">
         <label class="block text-sm font-medium text-slate-600 mb-1">Park</label>
-        <select wire:model.live="parkId" class="w-full max-w-sm rounded-lg border-slate-300">
+        <select wire:model.live="parkId" class="w-full max-w-sm rounded-lg border border-slate-300 focus:border-emerald-500 focus:ring-emerald-500 focus:ring-1">
             @foreach ($this->parks as $park)
-                <option value="{{ $park->id }}">{{ $park->name }} â€” {{ $park->location }}</option>
+                <option value="{{ $park->id }}">{{ $park->name }} — {{ $park->location }}</option>
             @endforeach
         </select>
     </div>
 
     {{-- Verify payment / confirm booking --}}
     <div class="space-y-3">
-        <h2 class="font-medium text-slate-700">Pending online bookings â€” verify payment</h2>
+        <h2 class="font-medium text-slate-700">Pending online bookings — verify payment</h2>
 
         @forelse ($this->pendingBookings as $booking)
             <div class="bg-white rounded-xl border border-slate-200 p-4 flex items-center justify-between">
@@ -36,10 +36,12 @@
                     <p class="font-medium text-slate-800">{{ $booking->passengerName() }}</p>
                     <p class="text-sm text-slate-500">
                         {{ $booking->trip->route->label() }} · Seat #{{ $booking->seat_no }} ·
-                        â‚¦{{ number_format($booking->trip->route->fare, 2) }} · Ref: {{ $booking->reference }}
+                        ₦{{ number_format($booking->trip->route->fare, 2) }} · Ref: {{ $booking->reference }}
                     </p>
                 </div>
                 <button wire:click="confirmAndCollectCash({{ $booking->id }})"
+                    wire:loading.attr="disabled" wire:loading.class="opacity-50"
+                    wire:confirm="Confirm payment of ₦{{ number_format($booking->trip->route->fare, 2) }} for {{ $booking->passengerName() }}?"
                     class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-sm hover:bg-emerald-700">
                     Confirm · collect cash
                 </button>
@@ -58,7 +60,7 @@
         <div class="grid sm:grid-cols-3 gap-4">
             <div>
                 <label class="block text-sm font-medium text-slate-600 mb-1">Trip</label>
-                <select wire:model="walkInTripId" class="w-full rounded-lg border-slate-300">
+                <select wire:model="walkInTripId" class="w-full rounded-lg border border-slate-300 focus:border-emerald-500 focus:ring-emerald-500 focus:ring-1">
                     <option value="">Select trip</option>
                     @foreach ($this->loadingTrips as $trip)
                         <option value="{{ $trip->id }}">
@@ -71,17 +73,18 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-slate-600 mb-1">Passenger name</label>
-                <input type="text" wire:model="walkInName" class="w-full rounded-lg border-slate-300">
+                <input type="text" wire:model="walkInName" class="w-full rounded-lg border border-slate-300 focus:border-emerald-500 focus:ring-emerald-500 focus:ring-1">
                 @error('walkInName') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
                 <label class="block text-sm font-medium text-slate-600 mb-1">Phone number</label>
-                <input type="text" wire:model="walkInPhone" class="w-full rounded-lg border-slate-300">
+                <input type="text" wire:model="walkInPhone" class="w-full rounded-lg border border-slate-300 focus:border-emerald-500 focus:ring-emerald-500 focus:ring-1">
                 @error('walkInPhone') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
             </div>
         </div>
 
-        <button wire:click="recordWalkIn" class="px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm hover:bg-emerald-700">
+        <button wire:click="recordWalkIn" wire:loading.attr="disabled" wire:loading.class="opacity-50"
+            class="px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm hover:bg-emerald-700">
             Book seat &amp; collect cash
         </button>
 
@@ -103,7 +106,7 @@
                         <p class="text-slate-700">{{ $payment->booking->passengerName() }} · {{ $payment->booking->trip->route->label() }}</p>
                         <p class="text-slate-400">{{ $payment->created_at->format('g:i A') }} · {{ ucfirst($payment->method) }} · Ref: {{ $payment->reference }}</p>
                     </div>
-                    <span class="font-medium text-emerald-700">â‚¦{{ number_format($payment->amount, 2) }}</span>
+                    <span class="font-medium text-emerald-700">₦{{ number_format($payment->amount, 2) }}</span>
                 </div>
             @empty
                 <p class="text-slate-400 text-sm py-4 text-center">No transactions recorded yet today.</p>

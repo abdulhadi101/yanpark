@@ -43,8 +43,9 @@ class BookingService
                 throw new \RuntimeException('A paid booking cannot be cancelled here — a refund/void must be handled at the park office.');
             }
 
+            $booking->payment()?->delete();
             $booking->update(['status' => 'cancelled']);
-            $booking->trip()->decrement('seats_booked');
+            $booking->trip()->where('seats_booked', '>', 0)->decrement('seats_booked');
 
             return $booking->fresh();
         });

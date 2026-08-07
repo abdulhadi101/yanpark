@@ -1,38 +1,42 @@
-<x-layouts.app>
-    <div class="max-w-4xl mx-auto space-y-6">
-        <div class="flex items-center justify-between">
-            <h1 class="text-2xl font-semibold text-slate-800">Routes</h1>
-            <a href="{{ route('admin.routes.create') }}" class="px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm hover:bg-emerald-700">
-                Add route
-            </a>
-        </div>
+@extends('layouts.app.sidebar')
 
-        @if (session('status'))
-            <div class="rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm px-4 py-3">
-                {{ session('status') }}
+@section('content')
+    <main class="flex-1">
+        <div class="max-w-5xl mx-auto space-y-6">
+            <div class="flex items-center justify-between">
+                <h1 class="text-2xl font-semibold text-slate-800">Routes</h1>
+                <a href="{{ route('admin.routes.create') }}" class="px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm hover:bg-emerald-700">
+                    Add route
+                </a>
             </div>
-        @endif
 
-        <div class="bg-white rounded-xl border border-slate-200 divide-y divide-slate-100">
-            @forelse ($routes as $route)
-                <div class="p-4 flex items-center justify-between">
-                    <div>
-                        <p class="font-medium text-slate-800">{{ $route->label() }}</p>
-                        <p class="text-sm text-slate-500">{{ $route->park->name }} · â‚¦{{ number_format($route->fare, 2) }}</p>
-                    </div>
-                    <div class="flex gap-3 text-sm">
-                        <a href="{{ route('admin.routes.edit', $route) }}" class="text-slate-600 underline">Edit</a>
-                        <form method="POST" action="{{ route('admin.routes.destroy', $route) }}" onsubmit="return confirm('Delete this route?')">
-                            @csrf @method('DELETE')
-                            <button class="text-red-600 underline">Delete</button>
-                        </form>
-                    </div>
+            @if (session('status'))
+                <div class="rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm px-4 py-3">
+                    {{ session('status') }}
                 </div>
-            @empty
-                <p class="p-6 text-center text-slate-400">No routes yet.</p>
-            @endforelse
-        </div>
+            @endif
 
-        {{ $routes->links() }}
-    </div>
-</x-layouts.app>
+            <div class="bg-white rounded-xl border border-slate-200 divide-y divide-slate-100">
+                @forelse ($routes as $route)
+                    <div class="p-4 flex items-center justify-between">
+                        <div>
+                            <p class="font-medium text-slate-800">{{ $route->label() }}</p>
+                            <p class="text-sm text-slate-500">{{ $route->park->name }} · ₦{{ number_format($route->fare, 2) }}</p>
+                        </div>
+                        <div class="flex gap-3 text-sm">
+                            <a href="{{ route('admin.routes.edit', $route) }}" class="text-slate-600 underline">Edit</a>
+                            <form method="POST" action="{{ route('admin.routes.destroy', $route) }}" onsubmit="return confirm('Delete this route?')">
+                                @csrf @method('DELETE')
+                                <button class="text-red-600 underline">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                @empty
+                    <p class="p-6 text-center text-slate-400">No routes yet.</p>
+                @endforelse
+            </div>
+
+            {{ $routes->links() }}
+        </div>
+    </main>
+@endsection

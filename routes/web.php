@@ -78,3 +78,5 @@ Route::middleware(['auth', 'role:passenger'])->name('passenger.')->group(functio
 // ---- Shared (any authenticated role, ownership checked in the controller) ----
 
 Route::middleware('auth')->get('/tickets/{booking}', [TicketController::class, 'show'])->name('tickets.show');
+
+require __DIR__.'/settings.php';

@@ -40,6 +40,7 @@
                         <a href="{{ route('tickets.show', $booking) }}" target="_blank" class="text-emerald-700 underline">View ticket</a>
                     @elseif ($booking->status === 'pending')
                         <button wire:click="cancel({{ $booking->id }})" wire:confirm="Cancel this booking?"
+                            wire:loading.attr="disabled" wire:loading.class="opacity-50"
                             class="text-red-600 underline">Cancel</button>
                     @endif
                 </div>

@@ -16,6 +16,11 @@ class Booking extends Model
         'walk_in_name', 'walk_in_phone',
     ];
 
+    protected function casts(): array
+    {
+        return ['seat_no' => 'integer'];
+    }
+
     public function trip(): BelongsTo
     {
         return $this->belongsTo(Trip::class);
@@ -38,11 +43,11 @@ class Booking extends Model
 
     public function passengerName(): string
     {
-        return $this->user->name ?? $this->walk_in_name ?? 'Walk-in passenger';
+        return $this->user?->name ?? $this->walk_in_name ?? 'Walk-in passenger';
     }
 
     public function passengerPhone(): ?string
     {
-        return $this->user->phone ?? $this->walk_in_phone;
+        return $this->user?->phone ?? $this->walk_in_phone;
     }
 }

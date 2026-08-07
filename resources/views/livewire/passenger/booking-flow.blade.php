@@ -18,12 +18,12 @@
                 <div>
                     <label class="block text-sm font-medium text-slate-600 mb-1">Travel date</label>
                     <input type="date" wire:model.live="travelDate"
-                        class="w-full rounded-lg border-slate-300 focus:border-emerald-500 focus:ring-emerald-500">
+                        class="w-full rounded-lg border border-slate-300 focus:border-emerald-500 focus:ring-emerald-500 focus:ring-1">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-slate-600 mb-1">Search route</label>
                     <input type="text" wire:model.live.debounce.300ms="originFilter" placeholder="e.g. Bauchi, Jos..."
-                        class="w-full rounded-lg border-slate-300 focus:border-emerald-500 focus:ring-emerald-500">
+                        class="w-full rounded-lg border border-slate-300 focus:border-emerald-500 focus:ring-emerald-500 focus:ring-1">
                 </div>
             </div>
         </div>
@@ -40,8 +40,9 @@
                         </p>
                     </div>
                     <div class="text-right">
-                        <p class="font-semibold text-emerald-700">â‚¦{{ number_format($trip->route->fare, 2) }}</p>
+                        <p class="font-semibold text-emerald-700">₦{{ number_format($trip->route->fare, 2) }}</p>
                         <button wire:click="selectTrip({{ $trip->id }})" @disabled($trip->isFull())
+                            wire:loading.attr="disabled" wire:loading.class="opacity-50"
                             class="mt-1 text-sm px-3 py-1.5 rounded-lg bg-emerald-600 text-white disabled:bg-slate-300 disabled:cursor-not-allowed hover:bg-emerald-700">
                             {{ $trip->isFull() ? 'Full' : 'Select' }}
                         </button>
@@ -57,18 +58,19 @@
 
     {{-- Step 2: confirm --}}
     @if ($step === 'confirm' && $selectedTripId)
-        @php($trip = \App\Models\Trip::with(['route', 'vehicle'])->find($selectedTripId))
+        @php($trip = $this->selectedTrip)
         <div class="bg-white rounded-xl border border-slate-200 p-6 space-y-4">
             <h2 class="font-semibold text-slate-800">Confirm your seat</h2>
             <dl class="text-sm divide-y divide-slate-100">
                 <div class="flex justify-between py-2"><dt class="text-slate-500">Route</dt><dd>{{ $trip->route->label() }}</dd></div>
                 <div class="flex justify-between py-2"><dt class="text-slate-500">Departure</dt><dd>{{ $trip->departure_time->format('D, d M Y g:i A') }}</dd></div>
                 <div class="flex justify-between py-2"><dt class="text-slate-500">Vehicle</dt><dd>{{ $trip->vehicle->plate_no }}</dd></div>
-                <div class="flex justify-between py-2"><dt class="text-slate-500">Fare</dt><dd class="font-semibold text-emerald-700">â‚¦{{ number_format($trip->route->fare, 2) }}</dd></div>
+                <div class="flex justify-between py-2"><dt class="text-slate-500">Fare</dt><dd class="font-semibold text-emerald-700">₦{{ number_format($trip->route->fare, 2) }}</dd></div>
             </dl>
             <div class="flex gap-3">
                 <button wire:click="backToSearch" class="px-4 py-2 rounded-lg border border-slate-300 text-slate-600 text-sm">Back</button>
-                <button wire:click="confirmBooking" class="px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm hover:bg-emerald-700">Reserve seat</button>
+                <button wire:click="confirmBooking" wire:loading.attr="disabled" wire:loading.class="opacity-50" wire:confirm="Reserve this seat?"
+                    class="px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm hover:bg-emerald-700">Reserve seat</button>
             </div>
         </div>
     @endif
@@ -78,8 +80,9 @@
         <div class="bg-white rounded-xl border border-slate-200 p-6 space-y-4">
             <h2 class="font-semibold text-slate-800">Pay for your booking</h2>
             <p class="text-sm text-slate-500">Reference: <span class="font-mono">{{ $activeBooking->reference }}</span> · Seat #{{ $activeBooking->seat_no }}</p>
-            <p class="text-sm text-slate-500">This is a demo payment step â€” clicking "Pay now" simulates a successful transaction.</p>
-            <button wire:click="pay" class="px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm hover:bg-emerald-700">Pay now</button>
+            <p class="text-sm text-slate-500">This is a demo payment step — clicking "Pay now" simulates a successful transaction.</p>
+            <button wire:click="pay" wire:loading.attr="disabled" wire:loading.class="opacity-50" wire:confirm="Confirm payment?"
+                class="px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm hover:bg-emerald-700">Pay now</button>
         </div>
     @endif
 

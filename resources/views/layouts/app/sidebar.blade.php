@@ -1,101 +1,179 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         @include('partials.head')
     </head>
-    <body class="min-h-screen bg-white dark:bg-zinc-800">
-        <flux:sidebar sticky collapsible="mobile" class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
-            <flux:sidebar.header>
-                <x-app-logo :sidebar="true" href="{{ route('dashboard') }}" wire:navigate />
-                <flux:sidebar.collapse class="lg:hidden" />
-            </flux:sidebar.header>
+    <body class="min-h-screen bg-white" x-data="{ sidebarOpen: false }">
+        @php
+            $adminLinks = [
+                ['route' => 'admin.dashboard', 'icon' => 'home', 'label' => __('Dashboard'), 'pattern' => 'admin.dashboard'],
+                ['route' => 'admin.parks.index', 'icon' => 'map-pin', 'label' => __('Parks'), 'pattern' => 'admin.parks.*'],
+                ['route' => 'admin.routes.index', 'icon' => 'sign-post', 'label' => __('Routes'), 'pattern' => 'admin.routes.*'],
+                ['route' => 'admin.vehicles.index', 'icon' => 'truck', 'label' => __('Vehicles'), 'pattern' => 'admin.vehicles.*'],
+                ['route' => 'admin.drivers.index', 'icon' => 'user', 'label' => __('Drivers'), 'pattern' => 'admin.drivers.*'],
+                ['route' => 'admin.bookings.index', 'icon' => 'ticket', 'label' => __('Bookings'), 'pattern' => 'admin.bookings.*'],
+                ['route' => 'admin.users.index', 'icon' => 'users', 'label' => __('Users'), 'pattern' => 'admin.users.*'],
+                ['route' => 'admin.trips', 'icon' => 'route', 'label' => __('Trips'), 'pattern' => 'admin.trips'],
+                ['route' => 'admin.reports', 'icon' => 'chart-bar', 'label' => __('Reports'), 'pattern' => 'admin.reports'],
+            ];
+            $passengerLinks = [
+                ['route' => 'passenger.book', 'icon' => 'ticket', 'label' => __('Book a trip'), 'pattern' => 'passenger.book'],
+                ['route' => 'passenger.bookings', 'icon' => 'list-bullet', 'label' => __('My bookings'), 'pattern' => 'passenger.bookings'],
+            ];
+        @endphp
 
-            <flux:sidebar.nav>
-                <flux:sidebar.group :heading="__('Platform')" class="grid">
-                    <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-                        {{ __('Dashboard') }}
-                    </flux:sidebar.item>
-                </flux:sidebar.group>
-            </flux:sidebar.nav>
+        <div class="flex min-h-screen">
+            {{-- Desktop Sidebar --}}
+            <aside class="hidden lg:flex lg:flex-col lg:w-64 lg:border-e lg:border-zinc-200 lg:bg-zinc-50 lg:fixed lg:inset-y-0">
+                <div class="flex items-center gap-3 h-16 px-4 border-b border-zinc-200 shrink-0">
+                    <a href="{{ route('dashboard') }}" wire:navigate class="flex items-center gap-2.5">
+                        <span class="flex items-center justify-center size-8 rounded-lg bg-zinc-900 text-white shrink-0">
+                            <x-app-logo-icon class="size-5 fill-current" />
+                        </span>
+                        <span class="font-semibold text-zinc-900 text-lg tracking-tight">{{ config('app.name', 'Laravel') }}</span>
+                    </a>
+                </div>
 
-            <flux:spacer />
+                <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-6">
+                    @auth
+                        @if (auth()->user()->isAdmin())
+                            @include('partials._sidebar-nav', ['heading' => __('Admin'), 'links' => $adminLinks])
+                        @elseif (auth()->user()->isCashier())
+                            @include('partials._sidebar-nav', ['heading' => __('Cashier'), 'links' => [['route' => 'cashier.counter', 'icon' => 'calculator', 'label' => __('Counter'), 'pattern' => 'cashier.counter']]])
+                        @else
+                            @include('partials._sidebar-nav', ['heading' => __('Passenger'), 'links' => $passengerLinks])
+                        @endif
+                    @else
+                        @include('partials._sidebar-nav', ['heading' => __('Welcome'), 'links' => [
+                            ['route' => 'login', 'icon' => 'arrow-right-end-on-rectangle', 'label' => __('Login'), 'pattern' => 'login'],
+                            ['route' => 'register', 'icon' => 'user-plus', 'label' => __('Register'), 'pattern' => 'register'],
+                        ]])
+                    @endauth
+                </nav>
 
-            <flux:sidebar.nav>
-                <flux:sidebar.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
-                    {{ __('Repository') }}
-                </flux:sidebar.item>
+                {{-- Desktop User Menu --}}
+                @auth
+                <div class="border-t border-zinc-200 p-3 shrink-0 hidden lg:block" x-data="{ open: false }">
+                    <div class="relative">
+                        <button @click="open = !open" class="flex items-center gap-3 w-full px-3 py-2 text-sm font-medium rounded-lg text-zinc-700 hover:text-zinc-900 hover:bg-zinc-100 transition-colors text-start cursor-pointer">
+                            <span class="flex items-center justify-center size-8 rounded-full bg-zinc-200 text-zinc-600 text-sm font-semibold shrink-0">
+                                {{ auth()->user()->initials() }}
+                            </span>
+                            <span class="flex-1 truncate">{{ auth()->user()->name }}</span>
+                            <x-icon name="chevrons-up-down" class="size-4 shrink-0 text-zinc-400" />
+                        </button>
 
-                <flux:sidebar.item icon="book-open-text" href="https://laravel.com/docs/starter-kits#livewire" target="_blank">
-                    {{ __('Documentation') }}
-                </flux:sidebar.item>
-            </flux:sidebar.nav>
-
-            <x-desktop-user-menu class="hidden lg:block" :name="auth()->user()->name" />
-        </flux:sidebar>
-
-        <!-- Mobile User Menu -->
-        <flux:header class="lg:hidden">
-            <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
-
-            <flux:spacer />
-
-            <flux:dropdown position="top" align="end">
-                <flux:profile
-                    :initials="auth()->user()->initials()"
-                    icon-trailing="chevron-down"
-                />
-
-                <flux:menu>
-                    <flux:menu.radio.group>
-                        <div class="p-0 text-sm font-normal">
-                            <div class="flex items-center gap-2 px-1 py-1.5 text-start text-sm">
-                                <flux:avatar
-                                    :name="auth()->user()->name"
-                                    :initials="auth()->user()->initials()"
-                                />
-
-                                <div class="grid flex-1 text-start text-sm leading-tight">
-                                    <flux:heading class="truncate">{{ auth()->user()->name }}</flux:heading>
-                                    <flux:text class="truncate">{{ auth()->user()->email }}</flux:text>
+                        <div x-show="open" @click.outside="open = false" x-transition.origin.bottom-left x-cloak
+                             class="absolute bottom-full left-0 right-0 mb-1 bg-white rounded-lg shadow-lg border border-zinc-200 py-1 z-50">
+                            <div class="flex items-center gap-2 px-3 py-2 text-sm">
+                                <span class="flex items-center justify-center size-8 rounded-full bg-zinc-200 text-zinc-600 text-sm font-semibold shrink-0">
+                                    {{ auth()->user()->initials() }}
+                                </span>
+                                <div class="flex-1 min-w-0">
+                                    <p class="font-medium text-zinc-900 truncate">{{ auth()->user()->name }}</p>
+                                    <p class="text-zinc-500 truncate">{{ auth()->user()->email }}</p>
                                 </div>
                             </div>
+                            <div class="border-t border-zinc-100 my-1"></div>
+                            <a href="{{ route('profile.edit') }}" wire:navigate class="flex items-center gap-2 px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-50">
+                                <x-icon name="cog" class="size-5 shrink-0" />
+                                {{ __('Settings') }}
+                            </a>
+                            <div class="border-t border-zinc-100 my-1"></div>
+                            <form method="POST" action="{{ route('logout') }}" class="w-full">
+                                @csrf
+                                <button type="submit" class="flex items-center gap-2 w-full px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-50 cursor-pointer">
+                                    <x-icon name="arrow-right-start-on-rectangle" class="size-5 shrink-0" />
+                                    {{ __('Log out') }}
+                                </button>
+                            </form>
                         </div>
-                    </flux:menu.radio.group>
+                    </div>
+                </div>
+                @endauth
+            </aside>
 
-                    <flux:menu.separator />
+            {{-- Mobile Sidebar Overlay --}}
+            <div x-show="sidebarOpen" x-transition:enter="transition-opacity ease-linear duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                 x-transition:leave="transition-opacity ease-linear duration-300" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                 @click="sidebarOpen = false" x-cloak class="fixed inset-0 z-40 bg-zinc-900/50 lg:hidden"></div>
 
-                    <flux:menu.radio.group>
-                        <flux:menu.item :href="route('profile.edit')" icon="cog" wire:navigate>
-                            {{ __('Settings') }}
-                        </flux:menu.item>
-                    </flux:menu.radio.group>
+            {{-- Mobile Sidebar --}}
+            <aside x-show="sidebarOpen" x-transition:enter="transition-transform ease-in-out duration-300" x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0"
+                   x-transition:leave="transition-transform ease-in-out duration-300" x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full"
+                   x-cloak class="fixed inset-y-0 left-0 z-50 w-64 bg-zinc-50 border-e border-zinc-200 lg:hidden flex flex-col">
+                <div class="flex items-center gap-3 h-16 px-4 border-b border-zinc-200 shrink-0">
+                    <a href="{{ route('dashboard') }}" wire:navigate class="flex items-center gap-2.5" @click="sidebarOpen = false">
+                        <span class="flex items-center justify-center size-8 rounded-lg bg-zinc-900 text-white shrink-0">
+                            <x-app-logo-icon class="size-5 fill-current" />
+                        </span>
+                        <span class="font-semibold text-zinc-900 text-lg tracking-tight">{{ config('app.name', 'Laravel') }}</span>
+                    </a>
+                    <button @click="sidebarOpen = false" class="ml-auto p-1 rounded-md text-zinc-500 hover:text-zinc-700 cursor-pointer">
+                        <x-icon name="x-mark" class="size-5" />
+                    </button>
+                </div>
 
-                    <flux:menu.separator />
+                <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-6">
+                    @auth
+                        @if (auth()->user()->isAdmin())
+                            @include('partials._sidebar-nav', ['heading' => __('Admin'), 'links' => $adminLinks, 'mobile' => true])
+                        @elseif (auth()->user()->isCashier())
+                            @include('partials._sidebar-nav', ['heading' => __('Cashier'), 'links' => [['route' => 'cashier.counter', 'icon' => 'calculator', 'label' => __('Counter'), 'pattern' => 'cashier.counter']], 'mobile' => true])
+                        @else
+                            @include('partials._sidebar-nav', ['heading' => __('Passenger'), 'links' => $passengerLinks, 'mobile' => true])
+                        @endif
+                    @else
+                        @include('partials._sidebar-nav', ['heading' => __('Welcome'), 'links' => [
+                            ['route' => 'login', 'icon' => 'arrow-right-end-on-rectangle', 'label' => __('Login'), 'pattern' => 'login'],
+                            ['route' => 'register', 'icon' => 'user-plus', 'label' => __('Register'), 'pattern' => 'register'],
+                        ], 'mobile' => true])
+                    @endauth
+                </nav>
+            </aside>
 
-                    <form method="POST" action="{{ route('logout') }}" class="w-full">
-                        @csrf
-                        <flux:menu.item
-                            as="button"
-                            type="submit"
-                            icon="arrow-right-start-on-rectangle"
-                            class="w-full cursor-pointer"
-                            data-test="logout-button"
-                        >
-                            {{ __('Log out') }}
-                        </flux:menu.item>
-                    </form>
-                </flux:menu>
-            </flux:dropdown>
-        </flux:header>
+            {{-- Main Content --}}
+            <div class="flex-1 lg:pl-64">
+                {{-- Mobile Header --}}
+                <div class="sticky top-0 z-30 flex items-center h-16 px-4 bg-white border-b border-zinc-200 lg:hidden">
+                    <button @click="sidebarOpen = true" class="p-2 -ml-2 rounded-md text-zinc-500 hover:text-zinc-700 cursor-pointer">
+                        <x-icon name="bars-2" class="size-5" />
+                    </button>
+                    <div class="flex-1"></div>
+                    <a href="{{ route('dashboard') }}" wire:navigate class="flex items-center gap-2">
+                        <span class="flex items-center justify-center size-8 rounded-lg bg-zinc-900 text-white shrink-0">
+                            <x-app-logo-icon class="size-5 fill-current" />
+                        </span>
+                        <span class="font-semibold text-zinc-900 text-lg tracking-tight">{{ config('app.name', 'Laravel') }}</span>
+                    </a>
+                    <div class="flex-1"></div>
+                </div>
 
-        {{ $slot }}
+                @yield('content', $slot ?? '')
+            </div>
+        </div>
 
         @persist('toast')
-            <flux:toast.group>
-                <flux:toast />
-            </flux:toast.group>
+            @if (session('status'))
+                <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 4000)" x-transition
+                     class="fixed bottom-4 right-4 z-50 bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 rounded-lg shadow-lg flex items-center gap-2">
+                    <x-icon name="check-circle" class="size-5 shrink-0" />
+                    <span class="text-sm font-medium">{{ session('status') }}</span>
+                    <button @click="show = false" class="ml-2 text-emerald-600 hover:text-emerald-800 cursor-pointer">
+                        <x-icon name="x-mark" class="size-4" />
+                    </button>
+                </div>
+            @endif
+            @if (session('error'))
+                <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 4000)" x-transition
+                     class="fixed bottom-4 right-4 z-50 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg shadow-lg flex items-center gap-2">
+                    <x-icon name="x-circle" class="size-5 shrink-0" />
+                    <span class="text-sm font-medium">{{ session('error') }}</span>
+                    <button @click="show = false" class="ml-2 text-red-600 hover:text-red-800 cursor-pointer">
+                        <x-icon name="x-mark" class="size-4" />
+                    </button>
+                </div>
+            @endif
         @endpersist
-
-        @fluxScripts
     </body>
 </html>

@@ -40,7 +40,7 @@
         @forelse ($popularRoutes as $route)
             <div class="flex justify-between py-2 border-b border-slate-100 last:border-0 text-sm">
                 <span class="text-slate-700">{{ $route->label }}</span>
-                <span class="text-slate-500">{{ $route->trips }} trip(s)</span>
+                <span class="text-slate-500">{{ $route->trips }} booking(s)</span>
             </div>
         @empty
             <p class="text-slate-400 text-sm">No trips recorded yet.</p>
