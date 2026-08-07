@@ -21,7 +21,7 @@ COPY . .
 RUN composer dump-autoload --optimize --classmap-authoritative
 
 # Stage 2: Node.js Build (Vite)
-FROM node:22-alpine AS node
+FROM node:22-slim AS node
 
 WORKDIR /app
 
