@@ -28,14 +28,14 @@ chmod -R 775 /var/lib/nginx
 echo "Linking storage..."
 php artisan storage:link --force 2>/dev/null || true
 
+echo "Running database migrations..."
+php artisan migrate --force || true
+
 echo "Clearing stale caches..."
 php artisan config:clear
 php artisan cache:clear
 php artisan view:clear
 php artisan route:clear
-
-echo "Running database migrations..."
-php artisan migrate --force || true
 
 echo "Running Laravel optimizations..."
 php artisan config:cache
