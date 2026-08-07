@@ -27,6 +27,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+Route::get('/health', fn () => response()->json(['ok' => true]));
+
 // Generic landing point after login — sends each role to its own home.
 // If the starter kit already defines a "dashboard" route, replace its
 // contents with this instead of adding a second one.
