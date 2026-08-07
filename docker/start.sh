@@ -39,7 +39,6 @@ php artisan route:clear
 
 echo "Running Laravel optimizations..."
 php artisan config:cache
-php artisan route:cache
 php artisan view:cache
 
 echo "Starting services via Supervisor..."
