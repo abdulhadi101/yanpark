@@ -49,7 +49,7 @@ RUN apk add --no-cache \
     icu-dev \
     oniguruma-dev \
     libxml2-dev \
-    libsqlite3-dev \
+    sqlite-dev \
     bash \
     nano \
     vim \
