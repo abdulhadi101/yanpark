@@ -53,42 +53,27 @@
 
                 {{-- Desktop User Menu --}}
                 @auth
-                <div class="border-t border-zinc-200 p-3 shrink-0 hidden lg:block" x-data="{ open: false }">
-                    <div class="relative">
-                        <button @click="open = !open" class="flex items-center gap-3 w-full px-3 py-2 text-sm font-medium rounded-lg text-zinc-700 hover:text-zinc-900 hover:bg-zinc-100 transition-colors text-start cursor-pointer">
-                            <span class="flex items-center justify-center size-8 rounded-full bg-zinc-200 text-zinc-600 text-sm font-semibold shrink-0">
-                                {{ auth()->user()->initials() }}
-                            </span>
-                            <span class="flex-1 truncate">{{ auth()->user()->name }}</span>
-                            <x-icon name="chevrons-up-down" class="size-4 shrink-0 text-zinc-400" />
-                        </button>
-
-                        <div x-show="open" @click.outside="open = false" x-transition.origin.bottom-left x-cloak
-                             class="absolute bottom-full left-0 right-0 mb-1 bg-white rounded-lg shadow-lg border border-zinc-200 py-1 z-50">
-                            <div class="flex items-center gap-2 px-3 py-2 text-sm">
-                                <span class="flex items-center justify-center size-8 rounded-full bg-zinc-200 text-zinc-600 text-sm font-semibold shrink-0">
-                                    {{ auth()->user()->initials() }}
-                                </span>
-                                <div class="flex-1 min-w-0">
-                                    <p class="font-medium text-zinc-900 truncate">{{ auth()->user()->name }}</p>
-                                    <p class="text-zinc-500 truncate">{{ auth()->user()->email }}</p>
-                                </div>
-                            </div>
-                            <div class="border-t border-zinc-100 my-1"></div>
-                            <a href="{{ route('profile.edit') }}" wire:navigate class="flex items-center gap-2 px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-50">
-                                <x-icon name="cog" class="size-5 shrink-0" />
-                                {{ __('Settings') }}
-                            </a>
-                            <div class="border-t border-zinc-100 my-1"></div>
-                            <form method="POST" action="{{ route('logout') }}" class="w-full">
-                                @csrf
-                                <button type="submit" class="flex items-center gap-2 w-full px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-50 cursor-pointer">
-                                    <x-icon name="arrow-right-start-on-rectangle" class="size-5 shrink-0" />
-                                    {{ __('Log out') }}
-                                </button>
-                            </form>
+                <div class="border-t border-zinc-200 p-3 shrink-0 hidden lg:block space-y-1">
+                    <div class="flex items-center gap-3 px-3 py-2">
+                        <span class="flex items-center justify-center size-8 rounded-full bg-zinc-200 text-zinc-600 text-sm font-semibold shrink-0">
+                            {{ auth()->user()->initials() }}
+                        </span>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-medium text-zinc-900 truncate">{{ auth()->user()->name }}</p>
+                            <p class="text-xs text-zinc-500 truncate">{{ auth()->user()->email }}</p>
                         </div>
                     </div>
+                    <a href="{{ route('profile.edit') }}" wire:navigate class="flex items-center gap-2 px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 rounded-lg transition-colors">
+                        <x-icon name="cog" class="size-4 shrink-0" />
+                        {{ __('Settings') }}
+                    </a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="flex items-center gap-2 w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer">
+                            <x-icon name="arrow-right-start-on-rectangle" class="size-4 shrink-0" />
+                            {{ __('Log out') }}
+                        </button>
+                    </form>
                 </div>
                 @endauth
             </aside>
@@ -130,6 +115,31 @@
                         ], 'mobile' => true])
                     @endauth
                 </nav>
+
+                @auth
+                <div class="border-t border-zinc-200 p-3 shrink-0 space-y-1">
+                    <div class="flex items-center gap-3 px-3 py-2">
+                        <span class="flex items-center justify-center size-8 rounded-full bg-zinc-200 text-zinc-600 text-sm font-semibold shrink-0">
+                            {{ auth()->user()->initials() }}
+                        </span>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-medium text-zinc-900 truncate">{{ auth()->user()->name }}</p>
+                            <p class="text-xs text-zinc-500 truncate">{{ auth()->user()->email }}</p>
+                        </div>
+                    </div>
+                    <a href="{{ route('profile.edit') }}" wire:navigate @click="sidebarOpen = false" class="flex items-center gap-2 px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 rounded-lg transition-colors">
+                        <x-icon name="cog" class="size-4 shrink-0" />
+                        {{ __('Settings') }}
+                    </a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="flex items-center gap-2 w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer">
+                            <x-icon name="arrow-right-start-on-rectangle" class="size-4 shrink-0" />
+                            {{ __('Log out') }}
+                        </button>
+                    </form>
+                </div>
+                @endauth
             </aside>
 
             {{-- Main Content --}}

@@ -11,7 +11,7 @@
         <x-stat-card label="Total users" :value="$totalUsers" />
         <x-stat-card label="Total buses" :value="$totalVehicles" />
         <x-stat-card label="Total trips" :value="$totalTrips" />
-        <x-stat-card label="Total bookings" :value="$totalBookings" />
+        <x-stat-card label="Total bookings" :value="$totalBookings" href="{{ route('admin.bookings.index') }}" />
     </div>
 
     <div class="grid sm:grid-cols-4 gap-4">
